@@ -1379,21 +1379,33 @@ class FigureExport(object):
         ly = self.pageHeight - ly + 5
         c = self.figureCanvas
 
+        if markdownImported:
+            # convert markdown to html
+            text = markdown.markdown(text)
+            print text
         red, green, blue = rgb
         red = float(red)/255
         green = float(green)/255
         blue = float(blue)/255
-        c.setFont("Helvetica", fontsize)
-        c.setFillColorRGB(red, green, blue)
+        # c.setFont("Helvetica", fontsize)
+        # c.setFillColorRGB(red, green, blue)
+        # TODO: Need to set style with Helvetica, fontsize & color
+        style = getSampleStyleSheet()['Normal']
+        para = Paragraph(text, style)
+        aW = self.pageWidth - (inch * 2)
+        w, h = para.wrap(aW, ly)
         if (align == "center"):
-            c.drawCentredString(x, ly, text)
+            # c.drawCentredString(x, ly, text)
+            para.drawOn(c, x - w/2, ly)
         elif (align == "right"):
-            c.drawRightString(x, ly, text)
+            # c.drawRightString(x, ly, text)
+            para.drawOn(c, x - w, ly)
         elif (align == "left"):
-            c.drawString(x, ly, text)
+            para.drawOn(c, x, ly)
         elif align == 'vertical':
             c.rotate(90)
-            c.drawCentredString(self.pageHeight - y, -(x + fontsize), text)
+            # c.drawCentredString(self.pageHeight - y, -(x + fontsize), text)
+            para.drawOn(c, self.pageHeight - y - w/2, -(x + fontsize))
             c.rotate(-90)
 
     def drawLine(self, x, y, x2, y2, width, rgb):
