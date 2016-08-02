@@ -21,7 +21,7 @@ __p += '"\n                    data-index="' +
 ((__t = ( c.color )) == null ? '' : __t) +
 '">\n                &nbsp\n            </button>\n            <button type="button" class="btn btn-default dropdown-toggle"\n                    data-toggle="dropdown" title="Pick channel color">\n                <span class="caret"></span>\n            </button>\n            <ul class="dropdown-menu colorpicker" data-index="' +
 ((__t = ( i )) == null ? '' : __t) +
-'">\n                <li class="dropdown-header">Channel Color</li>\n                <li class="divider"></li>\n                <li><a data-color="0000FF" href="#">\n                    <span style="background-color:#00f">&nbsp &nbsp &nbsp</span>&nbsp Blue\n                </a></li>\n                <li><a data-color="00FF00" href="#">\n                    <span style="background-color:#0f0">&nbsp &nbsp &nbsp</span>&nbsp Green\n                </a></li>\n                <li><a data-color="FF0000" href="#">\n                    <span style="background-color:#f00">&nbsp &nbsp &nbsp</span>&nbsp Red\n                </a></li>\n                <li><a data-color="FFFF00" href="#">\n                    <span style="background-color:#ff0">&nbsp &nbsp &nbsp</span>&nbsp Yellow\n                </a></li>\n                <li><a data-color="FFFFFF" href="#">\n                    <span style="background-color:#fff">&nbsp &nbsp &nbsp</span>&nbsp White\n                </a></li>\n                <li><a data-color="FF00FF" href="#">\n                    <span style="background-color:#f0f">&nbsp &nbsp &nbsp</span>&nbsp Magenta\n                </a></li>\n                <li class="divider"></li>\n                <li><a data-color="colorpicker" data-oldcolor="' +
+'">\n                <li class="dropdown-header">Channel Color</li>\n                <li class="divider"></li>\n                <li><a data-color="0000FF" href="#">\n                    <span style="background-color:#00f">&nbsp &nbsp &nbsp</span>&nbsp Blue\n                </a></li>\n                <li><a data-color="00FF00" href="#">\n                    <span style="background-color:#0f0">&nbsp &nbsp &nbsp</span>&nbsp Green\n                </a></li>\n                <li><a data-color="FF0000" href="#">\n                    <span style="background-color:#f00">&nbsp &nbsp &nbsp</span>&nbsp Red\n                </a></li>\n                <li><a data-color="FFFF00" href="#">\n                    <span style="background-color:#ff0">&nbsp &nbsp &nbsp</span>&nbsp Yellow\n                </a></li>\n                <li><a data-color="FFFFFF" href="#">\n                    <span style="background-color:#fff">&nbsp &nbsp &nbsp</span>&nbsp White\n                </a></li>\n                <li><a data-color="FF00FF" href="#">\n                    <span style="background-color:#f0f">&nbsp &nbsp &nbsp</span>&nbsp Magenta\n                </a></li>\n                <li class="divider"></li>\n                <li><a data-color="lut" href="#">\n                    <span class="lutOption">&nbsp &nbsp &nbsp</span>&nbsp Lookup Table...\n                </a></li>\n                <li><a data-color="colorpicker" data-oldcolor="' +
 ((__t = ( c.color )) == null ? '' : __t) +
 '" href="#">\n                    <span class="colorpickerOption">&nbsp &nbsp &nbsp</span>&nbsp More Colors...\n                </a></li>\n            </ul>\n        </div><br>\n    ';
  }); ;
@@ -489,6 +489,25 @@ __p += '\n                <div style=\'color:#' +
 '</div>\n            ';
  }); ;
 __p += '\n        </div>\n    </div>\n';
+
+}
+return __p
+};
+
+this["JST"]["static/figure/templates/modal_dialogs/lut_modal.html"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+__p += '\n\n<div class="btn-group-vertical" role="group">\n\n';
+ _.each(luts, function(lut, i) { ;
+__p += '\n\n\t<button type="button" class="btn btn-default lutOption" data-lutName="' +
+((__t = ( lut.name )) == null ? '' : __t) +
+'"> ' +
+((__t = ( lut.name )) == null ? '' : __t) +
+' </button>\n\n';
+ }) ;
+__p += '\n\n</div>\n';
 
 }
 return __p

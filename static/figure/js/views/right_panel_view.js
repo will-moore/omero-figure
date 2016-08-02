@@ -1421,6 +1421,13 @@
                         self.set_color(idx, newColor);
                     }
                 });
+            } else if (color === 'lut') {
+                console.log("Show LUT dialog...");
+                FigureLutPicker.show({
+                    success: function(lutName){
+                        self.set_color(idx, lutName);
+                    }
+                });
             } else {
                 this.set_color(idx, color);
             }
