@@ -1,6 +1,6 @@
 this["JST"] = this["JST"] || {};
 
-this["JST"]["static/figure/templates/channel_toggle_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/channel_toggle_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -45,7 +45,7 @@ __p += '\n                >\n            <span class="glyphicon"></span>\n      
 return __p
 };
 
-this["JST"]["static/figure/templates/figure_panel_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/figure_panel_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
 with (obj) {
@@ -57,7 +57,7 @@ __p += '    <!-- The content of <div class=\'imagePanel\'> for each panel -->\n 
 return __p
 };
 
-this["JST"]["static/figure/templates/info_panel_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/info_panel_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -94,7 +94,7 @@ __p += '\n                </small></div>\n            </td></tr>\n        </tbod
 return __p
 };
 
-this["JST"]["static/figure/templates/labels_form_inner_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/labels_form_inner_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -135,7 +135,7 @@ __p += '\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/labels_form_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/labels_form_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -154,7 +154,7 @@ __p += '\n        </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/rois_form_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/rois_form_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -211,7 +211,7 @@ __p += '\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/scalebar_form_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/scalebar_form_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -263,7 +263,7 @@ __p += '\n    </form>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/scalebar_panel_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/scalebar_panel_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -290,7 +290,7 @@ __p += '\n    </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/viewport_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/viewport_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -343,7 +343,7 @@ __p += '\n        </div>';
 return __p
 };
 
-this["JST"]["static/figure/templates/xywh_panel_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/xywh_panel_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -370,7 +370,7 @@ __p += '</small></div>\n            </td></tr>\n        </tbody>\n    </table>\n
 return __p
 };
 
-this["JST"]["static/figure/templates/zoom_crop_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/zoom_crop_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -393,7 +393,7 @@ __p += ' >\n        Paste\n    </button>\n    <button type="button" class="btn b
 return __p
 };
 
-this["JST"]["static/figure/templates/files/figure_file_item.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/files/figure_file_item.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -427,7 +427,7 @@ __p += '\n    <td>\n        ' +
 return __p
 };
 
-this["JST"]["static/figure/templates/labels/label_table_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/labels/label_table_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -450,7 +450,7 @@ __p += '\n            </td></tr>\n        </table>\n    </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/labels/label_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/labels/label_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -473,7 +473,7 @@ __p += '\n    </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/labels/label_vertical_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/labels/label_vertical_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -494,7 +494,7 @@ __p += '\n        </div>\n    </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/modal_dialogs/paper_setup_modal_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/modal_dialogs/paper_setup_modal_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -539,7 +539,7 @@ __p += '\n                    class="form-control" value="' +
 return __p
 };
 
-this["JST"]["static/figure/templates/modal_dialogs/preview_Id_change_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/modal_dialogs/preview_Id_change_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -614,7 +614,7 @@ __p += '\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/modal_dialogs/roi_modal_roi.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/modal_dialogs/roi_modal_roi.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -669,7 +669,7 @@ __p += '\n</tr>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/shapes/shape_item_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/shapes/shape_item_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }
@@ -690,7 +690,7 @@ __p += '\n\n    </div>\n';
 return __p
 };
 
-this["JST"]["static/figure/templates/shapes/shape_toolbar_template.html"] = function(obj) {
+this["JST"]["figure/static/figure/templates/shapes/shape_toolbar_template.html"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape, __j = Array.prototype.join;
 function print() { __p += __j.call(arguments, '') }

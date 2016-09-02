@@ -1831,8 +1831,7 @@ var CropModalView = Backbone.View.extend({
 
         el: $("#cropModal"),
 
-        // template: JST["static/figure/templates/paper_setup_modal_template.html"],
-        roiTemplate: JST["static/figure/templates/modal_dialogs/roi_modal_roi.html"],
+        roiTemplate: JST["figure/static/figure/templates/modal_dialogs/roi_modal_roi.html"],
 
         model:FigureModel,
 
@@ -3416,7 +3415,7 @@ var FileListItemView = Backbone.View.extend({
 
     tagName:"tr",
 
-    template: JST["static/figure/templates/files/figure_file_item.html"],
+    template: JST["figure/static/figure/templates/files/figure_file_item.html"],
 
     initialize:function () {
         this.model.bind("change", this.render, this);
@@ -3677,7 +3676,7 @@ var LegendView = Backbone.View.extend({
 
         el: $("#paperSetupModal"),
 
-        template: JST["static/figure/templates/modal_dialogs/paper_setup_modal_template.html"],
+        template: JST["figure/static/figure/templates/modal_dialogs/paper_setup_modal_template.html"],
 
         model:FigureModel,
 
@@ -3802,7 +3801,7 @@ var LegendView = Backbone.View.extend({
 
         el: $("#setIdModal"),
 
-        template: JST["static/figure/templates/modal_dialogs/preview_Id_change_template.html"],
+        template: JST["figure/static/figure/templates/modal_dialogs/preview_Id_change_template.html"],
 
         model:FigureModel,
 
@@ -4091,11 +4090,11 @@ var LegendView = Backbone.View.extend({
     var PanelView = Backbone.View.extend({
         tagName: "div",
         className: "imagePanel",
-        template: JST["static/figure/templates/figure_panel_template.html"],
-        label_template: JST["static/figure/templates/labels/label_template.html"],
-        label_vertical_template: JST["static/figure/templates/labels/label_vertical_template.html"],
-        label_table_template: JST["static/figure/templates/labels/label_table_template.html"],
-        scalebar_template: JST["static/figure/templates/scalebar_panel_template.html"],
+        template: JST["figure/static/figure/templates/figure_panel_template.html"],
+        label_template: JST["figure/static/figure/templates/labels/label_template.html"],
+        label_vertical_template: JST["figure/static/figure/templates/labels/label_vertical_template.html"],
+        label_table_template: JST["figure/static/figure/templates/labels/label_table_template.html"],
+        scalebar_template: JST["figure/static/figure/templates/scalebar_panel_template.html"],
 
 
         initialize: function(opts) {
@@ -4652,7 +4651,7 @@ var RectView = Backbone.View.extend({
 
         model: FigureModel,
 
-        roisTemplate: JST["static/figure/templates/rois_form_template.html"],
+        roisTemplate: JST["figure/static/figure/templates/rois_form_template.html"],
 
         el: $("#labelsTab"),
 
@@ -4825,7 +4824,7 @@ var RectView = Backbone.View.extend({
 
         model: FigureModel,
 
-        template: JST["static/figure/templates/labels_form_inner_template.html"],
+        template: JST["figure/static/figure/templates/labels_form_inner_template.html"],
 
         el: $("#labelsTab"),
 
@@ -4995,8 +4994,8 @@ var RectView = Backbone.View.extend({
     // Created new for each selection change
     var SelectedPanelsLabelsView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/labels_form_template.html"],
-        inner_template: JST["static/figure/templates/labels_form_inner_template.html"],
+        template: JST["figure/static/figure/templates/labels_form_template.html"],
+        inner_template: JST["figure/static/figure/templates/labels_form_inner_template.html"],
 
         initialize: function(opts) {
 
@@ -5109,7 +5108,7 @@ var RectView = Backbone.View.extend({
     // Created new for each selection change
     var ScalebarFormView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/scalebar_form_template.html"],
+        template: JST["figure/static/figure/templates/scalebar_form_template.html"],
 
         initialize: function(opts) {
 
@@ -5268,8 +5267,8 @@ var RectView = Backbone.View.extend({
 
     var InfoPanelView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/info_panel_template.html"],
-        xywh_template: JST["static/figure/templates/xywh_panel_template.html"],
+        template: JST["figure/static/figure/templates/info_panel_template.html"],
+        xywh_template: JST["figure/static/figure/templates/xywh_panel_template.html"],
 
         initialize: function(opts) {
             // if (opts.models) {
@@ -5462,7 +5461,7 @@ var RectView = Backbone.View.extend({
 
     var ImageViewerView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/viewport_template.html"],
+        template: JST["figure/static/figure/templates/viewport_template.html"],
 
         className: "imageViewer",
 
@@ -5824,7 +5823,7 @@ var RectView = Backbone.View.extend({
 
     var ZoomView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/zoom_crop_template.html"],
+        template: JST["figure/static/figure/templates/zoom_crop_template.html"],
 
         initialize: function(opts) {
 
@@ -5945,7 +5944,7 @@ var RectView = Backbone.View.extend({
     // Coloured Buttons to Toggle Channels on/off.
     var ChannelToggleView = Backbone.View.extend({
         tagName: "div",
-        template: JST["static/figure/templates/channel_toggle_template.html"],
+        template: JST["figure/static/figure/templates/channel_toggle_template.html"],
 
         initialize: function(opts) {
             // This View may apply to a single PanelModel or a list
@@ -6195,7 +6194,7 @@ var RectView = Backbone.View.extend({
 
 var RoiModalView = Backbone.View.extend({
 
-        template: JST["static/figure/templates/shapes/shape_toolbar_template.html"],
+        template: JST["figure/static/figure/templates/shapes/shape_toolbar_template.html"],
 
         el: $("#roiModal"),
 
