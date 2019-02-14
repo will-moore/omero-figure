@@ -780,7 +780,12 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
       selector = selector && /#/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
     }
 
-    var $parent = selector && $(selector)
+    // var $parent = selector && $(selector)
+    // Patched - see https://stackoverflow.com/questions/35539374/bootstrap-dropdown-jquery-uncaught-error-syntax-error-unrecognized-expression
+    var $parent;
+    if (selector && selector !== '#') {
+      $parent = $(selector)
+    }
 
     return $parent && $parent.length ? $parent : $this.parent()
   }
