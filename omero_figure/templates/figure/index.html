@@ -34,9 +34,6 @@
     <link rel="stylesheet" href="{% static 'figure/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'figure/css/figure.css' %}?version={{ version }}">
 
-    {% include "webgateway/base/includes/script_src_jquery.html" %}
-    {% include "webgateway/base/includes/jquery-ui.html" %}
-
     <script>
 
     var RELEASE_VERSION = "v{{ version }}";
@@ -53,14 +50,6 @@
         USER_FULL_NAME = "{{ userFullName }}",
         // Images larger than this are 'big' tiled images
         MAX_PLANE_SIZE = "{{ maxPlaneSize }}";
-
-    $(document).ready(function() {
-
-        // keep-alive ping every minute, so that OMERO session doesn't die
-        setInterval(function (){
-            $.get("{% url 'keepalive_ping' %}");
-        }, 60000);
-    });
 
     </script>
 
@@ -949,6 +938,8 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="{% static 'omero_figure/main.js' %}?version={{ version }}"></script>
+
 
     <script src="{% static 'figure/3rdparty/json2.js' %}"></script>
     <script src="{% static 'figure/3rdparty/underscore-1.3.3.js' %}"></script>
@@ -963,9 +954,6 @@
 
     <!-- underscore templates at static/figure/templates are compiled with '$ grunt jst' -->
     <script src="{% static 'figure/templates.js' %}?version={{ version }}"></script>
-
-    <!-- static/figure/js/ files are concatenated with '$ grunt concat' into static/figure.js -->
-    <script type="text/javascript" src="{% static 'figure/figure.js' %}?version={{ version }}"></script>
 
 </body>
 
