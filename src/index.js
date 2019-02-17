@@ -1,4 +1,5 @@
 
+import 'bootstrap';
 import FigureModel from './js/models/FigureModel'
 
 $(function(){
