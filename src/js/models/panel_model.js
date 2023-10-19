@@ -290,25 +290,25 @@
                 var d = digit + "";
                 return d.length === 1 ? ("0"+d) : d;
             };
-            var theT = this.get('theT'),
-                deltaT = this.get('deltaT')[theT] || 0,
-                text = "", h, m, s;
+            var theT = this.get('theT');
 
             var shiftIdx;
             if (ref_idx) {
                 shiftIdx = parseInt(ref_idx)
-                var shift = this.get('deltaT')[shiftIdx];
-                deltaT = shift==null ? deltaT : shift;
+                if (!isNaN(shiftIdx)) {
+                    theT = theT - shiftIdx;
+                }
             }
+            var deltaT = this.get('deltaT')[theT] || 0,
+                text = "", h, m, s;
+
             var isNegative = (deltaT < 0);
             deltaT = Math.abs(deltaT);
 
             var padlen = dec_prec>0 ? dec_prec+3 : 2;
             if (format === "index") {
                 isNegative = false;
-                if(!isNaN(shiftIdx) && shiftIdx > 0)
-                    text = "" + (theT + shiftIdx + 1);
-                else text = "" + (theT + 1);
+                text = "" + (theT + 1);
             } else if (['milliseconds', 'ms'].includes(format)) {
                 text = (deltaT*1000).toFixed(dec_prec) + " ms";
             } else if (['seconds', 'secs', 's'].includes(format)) {
@@ -400,7 +400,7 @@
                     if (ref_idx) {
                         var shift = parseInt(ref_idx)
                         if(!isNaN(shift)){
-                            deltaZ = theZ + shift;
+                            deltaZ = theZ - shift;
                         }
                     }
                     if (format === "pixel") {
