@@ -54,7 +54,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
     />
     
-    <script type="module" crossorigin src="./assets/index-D-uixjtK.js"></script>
+    <script type="module" crossorigin src="./assets/index-Cb7b72vd.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CeRLM4nQ.css">
   </head>
   <body id="body">
@@ -734,11 +734,14 @@
           </div>
           <form class="addImagesForm" role="form">
             <div class="modal-body">
-              <p>
+              <p class="omero_only_element">
                 Add images to the figure by entering their IDs, separated by
                 commas.<br />
                 Hint: You can also select images in the webclient, click the
                 link in right panel, copy the URL and paste it here:
+              </p>
+              <p class="standalone_only_element">
+                Add OME-Zarr images to the figure by entering their full URL:
               </p>
               <div
                 class="form-group"
@@ -1324,10 +1327,11 @@
                 <li class="import_json">
                   <a class="dropdown-item" href="#">Import from JSON...</a>
                 </li>
-                <li class="delete_figure">
+                <!-- omero_only_element will be hidden if not APP_SERVED_BY_OMERO -->
+                <li class="delete_figure omero_only_element">
                   <a class="dropdown-item" href="#">Delete</a>
                 </li>
-                <li class="chgrp_figure">
+                <li class="chgrp_figure omero_only_element">
                   <a class="dropdown-item" href="#">Move Figure to Group...</a>
                 </li>
                 <li class="paper_setup">
