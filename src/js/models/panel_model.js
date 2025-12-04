@@ -229,6 +229,13 @@
             newData.channels = newCh;
 
             this.set(newData);
+
+            let toUpdate = new PanelList([this]);
+            let panel = this;
+            toUpdate.loadPlatesWellsFields().then(function() {
+                // trigger re-rendering of labels
+                panel.trigger('change:labels');
+            });
         },
 
         hide_scalebar: function() {
@@ -1218,14 +1225,21 @@
         },
 
         addLabelsFromPlatesWellsFields: function(label_data) {
+            this.loadPlatesWellsFields().then(function() {
+                // After loading Plate/Well/Field data, add labels
+                this.forEach(function(p){
+                    p.add_labels([label_data]);
+                });
+            }.bind(this));
+        },
 
+        loadPlatesWellsFields: async function() {
             // TODO: could ignore image IDs if Plate/Well/Field loaded already
             var image_ids = this.map(function(s){return s.get('imageId')});
             image_ids = "image=" + image_ids.join("&image=");
             var url = BASE_WEBFIGURE_URL + "parents/?" + image_ids;
-            console.log('url', url);
             // Instead of jQuery $.getJSON use fetch
-            fetch(url, { credentials: "include" })
+            await fetch(url, { credentials: "include" })
                 .then(res => res.json())          // parse JSON from response
                 .then(function(data){             // handle parsed JSON
                     console.log(data);
@@ -1236,10 +1250,8 @@
                     this.forEach(function(p){
                         var iid = p.get('imageId');
                         if (parents[iid]) {
-                            p.set(parents[iid]);
+                            p.save(parents[iid]);
                         }
-                        console.log("Adding label..", label_data);
-                        p.add_labels([label_data]);
                     });
                 }.bind(this));
         },
