@@ -1,4 +1,26 @@
 
+7.3.0 (December 2025)
+---------------------
+
+- Support for intensity calibration "Colorbars" (Thanks to Tom Boissonnet) ([#605](https://github.com/ome/omero-figure/pull/605))
+- Text ROIs (Thanks to Rémy Dornier) ([#600](https://github.com/ome/omero-figure/pull/600))
+- Allow Admins to upload the export script from the web app ([#612](https://github.com/ome/omero-figure/pull/612))
+- Align panels to grid handles "sparse" layout (Thanks to Rémy Dornier) ([#651](https://github.com/ome/omero-figure/pull/651))
+- Scalebar margin configurable (Thanks to Rémy Dornier) ([#637](https://github.com/ome/omero-figure/pull/637))
+
+Fixes:
+- Fix color and position for ALL new panel insets ([#630](https://github.com/ome/omero-figure/pull/630))
+- Fix Arrow opacity (Thanks to Rémy Dornier) ([#638](https://github.com/ome/omero-figure/pull/638))
+- Fix wrapping of labels from X button ([#623](https://github.com/ome/omero-figure/pull/623))
+- Fix word wrap of image names (Thanks to Jens Wendt) ([#646](https://github.com/ome/omero-figure/pull/646))
+- Fix shape selection and drag ([#647](https://github.com/ome/omero-figure/pull/647))
+- Fix crop dialog scrolling for arbitary angles (Thanks to Niraj Kandpal) ([#653](https://github.com/ome/omero-figure/pull/653))
+
+Other:
+- Add contributing guide ([#610](https://github.com/ome/omero-figure/pull/610))
+- Bump python version ([#650](https://github.com/ome/omero-figure/pull/650))
+
+
 7.2.1 (January 2025)
 --------------------
 
