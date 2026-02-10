@@ -314,12 +314,22 @@
             exportOption = opts[export_opt];
 
             if (!APP_SERVED_BY_OMERO) {
-                let title = "Figure Export Options";
-                let buttons = ["OK"];
-                let message = `The standalone app doesn't support export to PDF.
-                <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>`;
+                let fileGlancerUrl = "http://localhost:7878/figure/export";
+                let self = this;
 
-                figureConfirmDialog(title, message, buttons);
+                var callback = function (btnText) {
+                    if (btnText === "Export to FileGlancer") {
+                        self.run_export_script(fileGlancerUrl, exportOption);
+                    }
+                }
+                let title = "Figure Export Options";
+                let buttons = ["Export to FileGlancer", "Cancel"];
+                let message = `The standalone app doesn't support export to PDF.
+                <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>
+                <p>EXPERIMENTAL: You can export your figure using Fileglancer, if setup with Figure app,
+                POST-ing the figure JSON to ${fileGlancerUrl}. Do you want to try this?</p>`;
+
+                figureConfirmDialog(title, message, buttons, callback);
                 return;
             }
 
