@@ -41,6 +41,19 @@ router = APIRouter()
 
 settings = get_settings()
 
+def get_static_dir():
+    """
+    Return the path to the static directory for the figure app.
+    
+    This is used to serve the static files for the figure app, which are built using Vite
+    NB: this uses "npm run build" (same as for OMERO.figure) BUT we need to use `omero-figure` as
+    the config base path, since fileglancer serves the static files from '/omero-figure/' URL.
+    """
+    current_file_path = os.path.abspath(__file__)
+    static_dir = os.path.join(os.path.dirname(current_file_path), "..", "..", "omero_figure/static/omero_figure")
+    static_dir = os.path.normpath(static_dir)
+    return static_dir
+
 def _get_mounted_filestore(fsp: FileSharePath):
     """Constructs a filestore for the given file share path, checking to make sure it is mounted."""
     filestore = Filestore(fsp)
