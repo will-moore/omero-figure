@@ -28,8 +28,8 @@ let config = {
 }
 
 // this will be undefined when deployed from netlify, but is used by gh-pages
-if (process.env.GITHUB_REPOSITORY_OWNER) {
+// if (process.env.GITHUB_REPOSITORY_OWNER) {
   config.base = "/omero-figure/";
-}
+// }
 
 export default defineConfig(config);
