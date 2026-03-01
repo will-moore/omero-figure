@@ -14,6 +14,7 @@
     import {OpenLocalFileModalView} from "./open_local_file_modal";
 
     import {CropModalView} from "./crop_modal_view";
+    import { FigureExportModalView } from "./figure_export_modal";
     import {ChgrpModalView} from "./chgrp_modal_view";
     import {RoiModalView} from "./roi_modal_view";
     import {LegendView} from "./legend_view";
@@ -49,6 +50,7 @@
             new PaperSetupModalView({model: this.model});
             new CropModalView({model: this.model});
             new ChgrpModalView({ model: this.model });
+            new FigureExportModalView({ model: this.model });
             new RoiModalView({model: this.model});
             new DpiModalView({model: this.model});
             new LegendView({model: this.model});
@@ -314,23 +316,29 @@
             exportOption = opts[export_opt];
 
             if (!APP_SERVED_BY_OMERO) {
-                let fileGlancerUrl = "http://localhost:7878/figure/export";
-                let self = this;
-
-                var callback = function (btnText) {
-                    if (btnText === "Export to FileGlancer") {
-                        self.run_export_script(fileGlancerUrl, exportOption);
-                    }
-                }
-                let title = "Figure Export Options";
-                let buttons = ["Export to FileGlancer", "Cancel"];
-                let message = `The standalone app doesn't support export to PDF.
-                <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>
-                <p>EXPERIMENTAL: You can export your figure using Fileglancer, if setup with Figure app,
-                POST-ing the figure JSON to ${fileGlancerUrl}. Do you want to try this?</p>`;
-
-                figureConfirmDialog(title, message, buttons, callback);
+                // show figureExportDialog modal
+                console.log("Show export options dialog for stand-alone app...");
+                showModal("figureExportDialog");
                 return;
+
+
+                // let fileGlancerUrl = "http://localhost:7878/omero-figure/export";
+                // let self = this;
+
+                // var callback = function (btnText) {
+                //     if (btnText === "Export to FileGlancer") {
+                //         self.run_export_script(fileGlancerUrl, exportOption);
+                //     }
+                // }
+                // let title = "Figure Export Options";
+                // let buttons = ["Export to FileGlancer", "Cancel"];
+                // let message = `The standalone app doesn't support export to PDF.
+                // <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>
+                // <p>EXPERIMENTAL: You can export your figure using Fileglancer, if setup with Figure app,
+                // POST-ing the figure JSON to ${fileGlancerUrl}. Do you want to try this?</p>`;
+
+                // figureConfirmDialog(title, message, buttons, callback);
+                // return;
             }
 
             var url = MAKE_WEBFIGURE_URL;

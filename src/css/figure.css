@@ -1167,6 +1167,27 @@
         font-size: 1.2rem;
     }
 
+    /* Figure export dialog */
+
+    .subdirs {
+        list-style: none;
+        padding: 5px;
+    }
+    .subdirs button {
+        cursor: pointer;
+        padding: 3px;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+    }
+    .subdirs button:hover {
+        background-color: #eee;
+        border-color: transparent;
+    }
+    .subdirs i {
+        margin-right: 5px;
+    }
+
     /*  color-picker  */
 
     .colorpickerOption {
