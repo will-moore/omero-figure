@@ -21,6 +21,7 @@ export const FigureExportModalView = Backbone.View.extend({
     filepath_dirs: [],
 
     // This will hold the subdirs of the current filepath_dirs, which are shown as options in the export dialog
+    // Each is an object with { name: "subdir_name", is_dir: true/false }
     current_subdirs: [],
 
     initialize: function () {
@@ -29,9 +30,9 @@ export const FigureExportModalView = Backbone.View.extend({
 
         // Here we handle init of the dialog when it's shown...
         document.getElementById('figureExportDialog').addEventListener('shown.bs.modal', () => {
-            console.log("FigureExportModalView shown... (export options will go here)");
+            $("button[type='submit']", self.$el).prop("disabled", true);
 
-            self.loadSubDirs(self.current_subdirs.join("/")).then(subdirs => {
+            self.loadSubDirs().then(subdirs => {
                 self.current_subdirs = subdirs;
                 self.render();
             });
@@ -50,7 +51,7 @@ export const FigureExportModalView = Backbone.View.extend({
         let index = parseInt(event.target.dataset.index);
         this.filepath_dirs = this.filepath_dirs.slice(0, index + 1);
 
-        this.loadSubDirs(this.filepath_dirs.join("/")).then(subdirs => {
+        this.loadSubDirs().then(subdirs => {
             this.current_subdirs = subdirs;
             this.render();
         });
@@ -60,21 +61,27 @@ export const FigureExportModalView = Backbone.View.extend({
         let subdir = event.target.dataset.subdir;
         this.filepath_dirs.push(subdir);
 
-        this.loadSubDirs(this.filepath_dirs.join("/")).then(subdirs => {
+        this.loadSubDirs().then(subdirs => {
             this.current_subdirs = subdirs;
             this.render();
         });
+        $("button[type='submit']", self.$el).prop("disabled", false);
     },
 
-    async loadSubDirs(filepath) {
+    async loadSubDirs() {
+
+        let filepath = this.filepath_dirs.join("/");
 
         let url = `/api/files/home?subpath=${encodeURI(filepath)}`;
-        let fdata = await fetch(url).then(response => response.json());
+        let fdata = await fetch(url).then(response => response.json()).catch(error => {
+            console.error("Error fetching subdirs:", error);
+            return { files: [] };
+        });
 
-        let subdirNames = fdata.files.map(f => f.name)
-            .filter(name => !name.startsWith("."));
+        let subdirs = fdata.files.filter(f => !f.name.startsWith("."))
+            .map(f => ({ name: f.name, is_dir: f.is_dir }));
 
-        return subdirNames;
+        return subdirs;
     },
 
     handleSubmit: function (event) {
@@ -86,19 +93,24 @@ export const FigureExportModalView = Backbone.View.extend({
     render: function() {
         var html = `
         <p style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
-            Path:
+            <span>Save to:</span>
+            <button class="btn btn-link pathdir" data-index="-1">
+                <i class="bi bi-house"></i>
+            </button>/
+
             ${this.filepath_dirs.map((dir, index) => `
-                <button class="btn btn-link pathdir data" data-index="${index}">${dir}</button> / `).join("")
+                <button class="btn btn-link pathdir" data-index="${index}">${dir}</button>/`).join("")
             }
         </p>
 
         <ul class="subdirs">
             ${this.current_subdirs.map(subdir => `
-                <li>
-                    <button class="btn subdir" data-subdir="${subdir}">
-                    <i class="bi bi-folder"></i>
-                    ${subdir}
-                    </button>
+                <li>${subdir.is_dir ?
+                    `<button class="btn subdir" data-subdir="${subdir.name}">
+                    <i class="bi bi-folder-fill"></i>
+                    ${subdir.name}
+                    </button>`:
+                    `<div style="padding: 3px;"><i class="bi bi-file-earmark"></i> ${subdir.name}</div>`}
                 </li>`).join("")}
         </ul>
         
