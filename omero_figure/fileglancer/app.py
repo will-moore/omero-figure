@@ -107,17 +107,30 @@ async def save(request: Request):
     return {"message": "Figure saved", "figure": "OK"}
 
 
-def run_export_script(figureJSON: str, exportOption: str):
-    print("Exporting figure with options:", exportOption)
+def run_export_script(figureJSON: str, outputPathName: str):
+    print("Exporting figure with options:", outputPathName)
     print("Figure JSON:", json.loads(figureJSON))
     # Simulate export processing
     # import time
     # time.sleep(5)  # Simulate time-consuming export task
     # run_export(json.loads(figureJSON), exportOption)
 
+    # make outputPathName into an absolute path using from
+    # the user's home directory as the base, and check that it is within the user's home directory to prevent path traversal attacks
+    home_dir = os.path.expanduser("~")
+    output_path = os.path.abspath(os.path.join(home_dir, outputPathName))
+    if not output_path.startswith(home_dir):
+        raise ValueError("Output path must be within the user's home directory")
+
+    print("Resolved output path:", output_path)
+
+    fext = output_path.split('.')[-1].lower()
+    file_type = "TIFF" if fext in ['tif', 'tiff'] else "PDF"
+
     script_args = {
                     "Figure_JSON": figureJSON,
-                    "Export_Option": exportOption,
+                    "outputPathName": output_path,
+                    "Export_Option": file_type,
                     # TODO: Fix URL
                     "Webclient_URI": "http://Fileglancer/"
                 }
@@ -131,13 +144,12 @@ def run_export_script(figureJSON: str, exportOption: str):
 @router.post("/export")
 async def export(
     figureJSON: Annotated[str, Form()],
-    exportOption: Annotated[str, Form()],
-    filepath: Annotated[str, Form()],
+    outputPathName: Annotated[str, Form()],
     background_tasks: BackgroundTasks,
     # username: str = Depends(get_current_user)
     ):
 
-    print("export", exportOption, filepath)
+    print("export", outputPathName)
 
     # with _get_user_context(username):
 
@@ -146,7 +158,7 @@ async def export(
     # if filestore is None:
     #     raise HTTPException(status_code=404 if "not found" in error else 500, detail=error)
 
-    background_tasks.add_task(run_export_script, figureJSON, exportOption)
+    background_tasks.add_task(run_export_script, figureJSON, outputPathName)
 
     return {"message": "Figure Exported", "figure": "OK"}
 

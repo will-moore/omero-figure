@@ -87,13 +87,32 @@ export const FigureExportModalView = Backbone.View.extend({
     handleSubmit: function (event) {
         event.preventDefault();
 
-        console.log("Export figure... (not implemented yet)");
+        console.log("Export figure...");
 
         var figureJSON = this.model.figure_toJSON();
+        var figureName = this.model.get("figureName") || "Untitled_Figure";
+        let fext = ".pdf";
+
+        // check file does not already exist in target dir
+        let subdirFileNames = this.current_subdirs.filter(f => !f.is_dir).map(f => f.name);
+        if (subdirFileNames.includes(figureName + fext)) {
+            let counter = 1;
+            let nameWithNumber = figureName + "_" + counter;
+            while (subdirFileNames.includes(nameWithNumber + fext)) {
+                counter++;
+                nameWithNumber = figureName + "_" + counter;
+            }
+            figureName = nameWithNumber;
+        } else {
+            figureName = figureName + fext;
+        }
+
+        let outputPathName = [...this.filepath_dirs, figureName].join("/");
+        console.log("outputPathName:", outputPathName);
+
         var data = {
             figureJSON: JSON.stringify(figureJSON),
-            exportOption: "PDF",
-            filepath: this.filepath_dirs.join("/")
+            outputPathName: outputPathName
         };
 
         let url = "/omero-figure/export";

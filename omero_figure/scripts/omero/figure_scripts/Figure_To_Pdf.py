@@ -3394,7 +3394,7 @@ def export_figure(conn, script_params):
     if conn is not None:
         conn.SERVICE_OPTS.setOmeroGroup(-1)
 
-    export_option = script_params['Export_Option']
+    export_option = script_params.get('Export_Option', "PDF")
 
     if export_option == 'PDF':
         fig_export = FigureExport(conn, script_params)
