@@ -88,6 +88,22 @@ export const FigureExportModalView = Backbone.View.extend({
         event.preventDefault();
 
         console.log("Export figure... (not implemented yet)");
+
+        var figureJSON = this.model.figure_toJSON();
+        var data = {
+            figureJSON: JSON.stringify(figureJSON),
+            exportOption: "PDF",
+            filepath: this.filepath_dirs.join("/")
+        };
+
+        let url = "/omero-figure/export";
+
+        // Start the Figure_To_Pdf.py script
+        $.post( url, data).done(function( data ) {
+            console.log("Figure export started successfully:", data);
+        }).fail(function( error ) {
+            console.error("Error exporting figure:", error);
+        });
     },
 
     render: function() {

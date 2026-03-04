@@ -97,7 +97,7 @@ def get_current_user(request: Request):
 
 # router.mount("/static", StaticFiles(packages=[("omero_figure", "statics")]), name="static")
 
-# fetch("http://localhost:7878/figure/save", {"method": "POST", body: JSON.stringify({ name: "example" })}).then(rsp => rsp.json()).then(j => console.log(j))
+# fetch("http://localhost:7878/omero-figure/save", {"method": "POST", body: JSON.stringify({ name: "example" })}).then(rsp => rsp.json()).then(j => console.log(j))
 @router.post("/save", tags=["figure"])
 async def save(request: Request):
     print("Figure save called", request)
@@ -113,7 +113,7 @@ def export_figure(figureJSON: str, exportOption: str):
     # Simulate export processing
     # import time
     # time.sleep(5)  # Simulate time-consuming export task
-    run_export(json.loads(figureJSON), exportOption)
+    # run_export(json.loads(figureJSON), exportOption)
     print("Figure export completed.")
 
 
@@ -122,11 +122,12 @@ def export_figure(figureJSON: str, exportOption: str):
 async def export(
     figureJSON: Annotated[str, Form()],
     exportOption: Annotated[str, Form()],
+    filepath: Annotated[str, Form()],
     background_tasks: BackgroundTasks,
     # username: str = Depends(get_current_user)
     ):
 
-    print("export", exportOption)
+    print("export", exportOption, filepath)
 
     # with _get_user_context(username):
 
