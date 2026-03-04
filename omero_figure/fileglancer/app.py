@@ -18,7 +18,7 @@ from fileglancer.filestore import Filestore
 from fileglancer.model import FileSharePath
 from fileglancer import auth
 
-# from omero_figure.export_script import run as run_export
+from omero_figure.scripts.omero.figure_scripts.Figure_To_Pdf import export_figure
 
 # $ eval "$(pixi shell-hook)"
 # pip install omero_figure
@@ -107,13 +107,23 @@ async def save(request: Request):
     return {"message": "Figure saved", "figure": "OK"}
 
 
-def export_figure(figureJSON: str, exportOption: str):
+def run_export_script(figureJSON: str, exportOption: str):
     print("Exporting figure with options:", exportOption)
     print("Figure JSON:", json.loads(figureJSON))
     # Simulate export processing
     # import time
     # time.sleep(5)  # Simulate time-consuming export task
     # run_export(json.loads(figureJSON), exportOption)
+
+    script_args = {
+                    "Figure_JSON": figureJSON,
+                    "Export_Option": exportOption,
+                    # TODO: Fix URL
+                    "Webclient_URI": "http://Fileglancer/"
+                }
+
+    export_figure(None, script_args)
+
     print("Figure export completed.")
 
 
@@ -136,7 +146,7 @@ async def export(
     # if filestore is None:
     #     raise HTTPException(status_code=404 if "not found" in error else 500, detail=error)
 
-    background_tasks.add_task(export_figure, figureJSON, exportOption)
+    background_tasks.add_task(run_export_script, figureJSON, exportOption)
 
     return {"message": "Figure Exported", "figure": "OK"}
 
