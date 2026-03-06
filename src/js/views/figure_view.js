@@ -316,7 +316,7 @@
             exportOption = opts[export_opt];
 
             // TODO: Need to check if we're served by Fileglancer!!]
-            const APP_SERVED_BY_FILEGLANCER = false;
+            const APP_SERVED_BY_FILEGLANCER = true;
 
             if (APP_SERVED_BY_OMERO) {
                 this.run_export_script(exportOption);
@@ -350,10 +350,10 @@
             let subdirFileNames = current_subdirs.filter(f => !f.is_dir).map(f => f.name);
             if (subdirFileNames.includes(figureName + fext)) {
                 let counter = 1;
-                let nameWithNumber = figureName + "_" + counter;
-                while (subdirFileNames.includes(nameWithNumber + fext)) {
+                let nameWithNumber = figureName + "_" + counter + fext;
+                while (subdirFileNames.includes(nameWithNumber)) {
                     counter++;
-                    nameWithNumber = figureName + "_" + counter;
+                    nameWithNumber = figureName + "_" + counter + fext
                 }
                 figureName = nameWithNumber;
             } else {
@@ -368,11 +368,49 @@
                 outputPathName: outputPathName
             };
 
+            let $pdf_inprogress = $("#pdf_inprogress").show();
+            let $create_figure_pdf = $(".export_pdf").hide();
+            let $pdf_download = $("#pdf_download").hide();
+
             let url = "/omero-figure/export";
 
             // Start the Figure_To_Pdf.py script
             $.post( url, data).done(function( data ) {
                 console.log("Figure export started successfully:", data);
+
+                // You could view directly from your browser...
+                // E.g. file:///Users/wmoore/Desktop/FIGURE/OME-Zarr%20demo_1.pdf
+                // BUT browser won't allow us to link to file:/// for security reasons
+                // let directLink = "file://" + outputPathName;
+
+                // keep polling to check for pdf or tiff to appear...
+                var i = setInterval(async function (){
+
+                    let filepath = filepath_dirs.join("/");
+                    let url = `/api/files/home?subpath=${encodeURI(filepath)}`;
+                    let fdata = await fetch(url).then(response => response.json()).catch(error => {
+                        console.error("Error fetching subdirs:", error);
+                        return { files: [] };
+                    });
+                    let subfiles = fdata.files.filter(f => !f.id_dir).map(f => f.name);
+                    console.log("subfiles", subfiles, "figureName", figureName);
+                    if (subfiles.includes(figureName)) {
+                        clearInterval(i);
+
+                        // Let Fileglancer show the local file
+                        var fileViewUrl = `/api/content/home?subpath=${encodeURI(outputPathName)}`;
+
+                        $create_figure_pdf.show();
+                        $pdf_inprogress.hide();
+                        // Download button links to e.g. file:///Users/wmoore/Desktop/FIGURE/OME-Zarr%20demo_1.pdf
+                        console.log("outputPathName", fileViewUrl)
+                        $pdf_download
+                            .attr({'href': fileViewUrl, 'data-original-title': 'Show Figure in your Browser'})
+                            .show()
+                            .children('i').prop('class', 'bi-box-arrow-up-right');
+                    }
+                }, 1000);
+
             }).fail(function( error ) {
                 console.error("Error exporting figure:", error);
             });

@@ -107,8 +107,8 @@ async def save(request: Request):
     return {"message": "Figure saved", "figure": "OK"}
 
 
-def run_export_script(figureJSON: str, outputPathName: str):
-    print("Exporting figure with options:", outputPathName)
+def run_export_script(figureJSON: str, output_path: str):
+    print("Exporting figure with options:", output_path)
     print("Figure JSON:", json.loads(figureJSON))
     # Simulate export processing
     # import time
@@ -117,12 +117,6 @@ def run_export_script(figureJSON: str, outputPathName: str):
 
     # make outputPathName into an absolute path using from
     # the user's home directory as the base, and check that it is within the user's home directory to prevent path traversal attacks
-    home_dir = os.path.expanduser("~")
-    output_path = os.path.abspath(os.path.join(home_dir, outputPathName))
-    if not output_path.startswith(home_dir):
-        raise ValueError("Output path must be within the user's home directory")
-
-    print("Resolved output path:", output_path)
 
     fext = output_path.split('.')[-1].lower()
     file_type = "TIFF" if fext in ['tif', 'tiff'] else "PDF"
@@ -158,9 +152,16 @@ async def export(
     # if filestore is None:
     #     raise HTTPException(status_code=404 if "not found" in error else 500, detail=error)
 
-    background_tasks.add_task(run_export_script, figureJSON, outputPathName)
+    home_dir = os.path.expanduser("~")
+    output_path = os.path.abspath(os.path.join(home_dir, outputPathName))
+    if not output_path.startswith(home_dir):
+        raise ValueError("Output path must be within the user's home directory")
 
-    return {"message": "Figure Exported", "figure": "OK"}
+    print("Resolved output path:", output_path)
+
+    background_tasks.add_task(run_export_script, figureJSON, output_path)
+
+    return {"message": "Figure Export Running...", "output": output_path}
 
 
 # http://127.0.0.1:7878/figure/app
