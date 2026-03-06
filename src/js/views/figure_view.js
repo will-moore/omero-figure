@@ -14,7 +14,7 @@
     import {OpenLocalFileModalView} from "./open_local_file_modal";
 
     import {CropModalView} from "./crop_modal_view";
-    import { FigureExportModalView } from "./figure_export_modal";
+    import FileglancerFilePickerModal from "./fileglancer_file_modal";
     import {ChgrpModalView} from "./chgrp_modal_view";
     import {RoiModalView} from "./roi_modal_view";
     import {LegendView} from "./legend_view";
@@ -50,7 +50,6 @@
             new PaperSetupModalView({model: this.model});
             new CropModalView({model: this.model});
             new ChgrpModalView({ model: this.model });
-            new FigureExportModalView({ model: this.model });
             new RoiModalView({model: this.model});
             new DpiModalView({model: this.model});
             new LegendView({model: this.model});
@@ -316,38 +315,72 @@
                 "to OMERO": "OMERO"};
             exportOption = opts[export_opt];
 
-            if (!APP_SERVED_BY_OMERO) {
-                // show figureExportDialog modal
-                console.log("Show export options dialog for stand-alone app...");
-                showModal("figureExportDialog");
-                return;
+            // TODO: Need to check if we're served by Fileglancer!!]
+            const APP_SERVED_BY_FILEGLANCER = false;
 
-
-                // let fileGlancerUrl = "http://localhost:7878/omero-figure/export";
-                // let self = this;
-
-                // var callback = function (btnText) {
-                //     if (btnText === "Export to FileGlancer") {
-                //         self.run_export_script(fileGlancerUrl, exportOption);
-                //     }
-                // }
-                // let title = "Figure Export Options";
-                // let buttons = ["Export to FileGlancer", "Cancel"];
-                // let message = `The standalone app doesn't support export to PDF.
-                // <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>
-                // <p>EXPERIMENTAL: You can export your figure using Fileglancer, if setup with Figure app,
-                // POST-ing the figure JSON to ${fileGlancerUrl}. Do you want to try this?</p>`;
-
-                // figureConfirmDialog(title, message, buttons, callback);
-                // return;
+            if (APP_SERVED_BY_OMERO) {
+                this.run_export_script(exportOption);
+            } else if (APP_SERVED_BY_FILEGLANCER) {
+                FileglancerFilePickerModal.show({
+                    title: `Export Figure to ${exportOption}`,
+                    subtitle: "Choose output directory",
+                    success: (filepath_dirs, current_subdirs) => {
+                        console.log("Got filepath_dirs!!!:", filepath_dirs);
+                        this.run_export_script_fileglancer(filepath_dirs, current_subdirs, exportOption);
+                    }
+                });
+            } else {
+                let title = "Figure Export Options";
+                let buttons = ["OK"];
+                let message = `The standalone app doesn't support export to PDF.
+                    <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally.
+                    TODO: add link & instructions.</p>`;
+                figureConfirmDialog(title, message, buttons);
             }
-
-            var url = MAKE_WEBFIGURE_URL;
-            this.run_export_script(url, exportOption);
         },
 
-        run_export_script: function(url, exportOption) {
+        run_export_script_fileglancer: function(filepath_dirs, current_subdirs, exportOption) {
+            console.log("Export figure to Fileglancer...");
 
+            var figureJSON = this.model.figure_toJSON();
+            var figureName = this.model.get("figureName") || "Untitled_Figure";
+            let fext = "." + exportOption.toLowerCase();
+
+            // check file does not already exist in target dir
+            let subdirFileNames = current_subdirs.filter(f => !f.is_dir).map(f => f.name);
+            if (subdirFileNames.includes(figureName + fext)) {
+                let counter = 1;
+                let nameWithNumber = figureName + "_" + counter;
+                while (subdirFileNames.includes(nameWithNumber + fext)) {
+                    counter++;
+                    nameWithNumber = figureName + "_" + counter;
+                }
+                figureName = nameWithNumber;
+            } else {
+                figureName = figureName + fext;
+            }
+
+            let outputPathName = [...filepath_dirs, figureName].join("/");
+            console.log("outputPathName:", outputPathName);
+
+            var data = {
+                figureJSON: JSON.stringify(figureJSON),
+                outputPathName: outputPathName
+            };
+
+            let url = "/omero-figure/export";
+
+            // Start the Figure_To_Pdf.py script
+            $.post( url, data).done(function( data ) {
+                console.log("Figure export started successfully:", data);
+            }).fail(function( error ) {
+                console.error("Error exporting figure:", error);
+            });
+        },
+
+        run_export_script: function(exportOption) {
+
+            var url = MAKE_WEBFIGURE_URL;
             let $pdf_inprogress = $("#pdf_inprogress").show();
             let $create_figure_pdf = $(".export_pdf").hide();
             let $pdf_download = $("#pdf_download").hide();
