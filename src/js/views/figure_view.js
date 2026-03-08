@@ -635,7 +635,17 @@
                     self.fileListViewModal.modal.show();
                 } else {
                     // Open local file or URL
-                    showModal("openLocalFileModal");
+                    // showModal("openLocalFileModal");
+                    FileglancerFilePickerModal.show({
+                        title: "Open Figure from Fileglancer",
+                        subtitle: "Choose a figure file to open",
+                        success: (filepath_dirs) => {
+                            console.log("Got filepath_dirs!!!:", filepath_dirs);
+                            let file = filepath_dirs.join("/");
+                            let figureFileUrl = `/api/content/home?subpath=${encodeURI(file)}`;
+                            self.app.navigate("/omero-figure/?file=" + figureFileUrl, {trigger: true});
+                        }
+                    });
                 }
             };
 

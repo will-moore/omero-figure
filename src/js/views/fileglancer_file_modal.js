@@ -15,6 +15,8 @@ export const FileglancerFilePicker = Backbone.View.extend({
 
     subtitle: "Choose file",
 
+    allow_files: [".json"], // allowed file extensions (if empty, only directories are shown)
+
     // This will hold the current path in the export dialog, which starts at the user's home dir
     filepath_dirs: [],
 
@@ -45,6 +47,7 @@ export const FileglancerFilePicker = Backbone.View.extend({
         if (options.title) {
             $(".modal-title", this.$el).text(options.title);
         }
+        $("button[type='submit']", this.$el).text(options.okbutton || "OK").prop("disabled", true);
 
         this.subtitle = options.subtitle || "Choose file";
 
@@ -78,13 +81,23 @@ export const FileglancerFilePicker = Backbone.View.extend({
     },
 
     handleSubdirClick: function (event) {
+        event.target.setAttribute("disabled", "true");
         let subdir = event.target.dataset.subdir;
-        this.filepath_dirs.push(subdir);
+        if (subdir) {
+            this.filepath_dirs.push(subdir);
 
-        this.loadSubDirs().then(subdirs => {
-            this.current_subdirs = subdirs;
-            this.render();
-        });
+            this.loadSubDirs().then(subdirs => {
+                this.current_subdirs = subdirs;
+                this.render();
+            });
+        } else if (this.allow_files.length > 0) {
+            let filename = event.target.dataset.filename;
+            if (filename) {
+                this.filepath_dirs.push(filename);
+                this.current_subdirs = [];
+                this.render();
+            }
+        }
         $("button[type='submit']", this.$el).prop("disabled", false);
     },
 
@@ -114,8 +127,9 @@ export const FileglancerFilePicker = Backbone.View.extend({
 
     render: function() {
         var html = `
-        <div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
-            <div>${this.subtitle}:</div>
+    <div style="display: flex; flex-direction: column; position: absolute; inset: 0">
+        <div style="border-bottom: 1px solid #ccc; padding-bottom: 5px; flex: 0 0 auto;">
+            <div style="padding: 10px 10px 0 10px;">${this.subtitle}:</div>
             <button class="btn btn-link pathdir" data-index="-1">
                 <i class="bi bi-house"></i>
             </button>/
@@ -125,17 +139,24 @@ export const FileglancerFilePicker = Backbone.View.extend({
             }
         </div>
 
-        <ul class="subdirs">
+        <ul class="subdirs" style="flex: 1 1 auto; overflow-y: auto">
             ${this.current_subdirs.map(subdir => `
                 <li>${subdir.is_dir ?
                     `<button class="btn subdir" data-subdir="${subdir.name}">
                     <i class="bi bi-folder-fill"></i>
                     ${subdir.name}
                     </button>`:
-                    `<div style="padding: 3px;"><i class="bi bi-file-earmark"></i> ${subdir.name}</div>`}
+                    // if we allow files ('allow_files' is set)
+                    this.allow_files.some(ext => subdir.name.endsWith(ext)) ? 
+                    `<button class="btn subdir" data-filename="${subdir.name}">
+                    <i class="bi bi-file-earmark"></i>
+                    ${subdir.name}
+                    </button>`:
+
+                    `<div style="padding: 3px; opacity: 0.5"><i class="bi bi-file-earmark"></i> ${subdir.name}</div>`}
                 </li>`).join("")}
         </ul>
-        
+    </div>
         `;
         
         $('.modal-body', this.$el).html(html);
