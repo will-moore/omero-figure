@@ -14,6 +14,7 @@
     import {OpenLocalFileModalView} from "./open_local_file_modal";
 
     import {CropModalView} from "./crop_modal_view";
+    import FileglancerFilePickerModal from "./fileglancer_file_modal";
     import {ChgrpModalView} from "./chgrp_modal_view";
     import {RoiModalView} from "./roi_modal_view";
     import {LegendView} from "./legend_view";
@@ -148,6 +149,7 @@
             "click .upload_omero_script": "upload_omero_script",
             "click .export_options li": "export_options",
             "click .add_panel": "addPanel",
+            "click .reload_metadata": "reloadMetadata",
             "click .delete_panel": "deleteSelectedPanels",
             "click .copy": "copy_selected_panels",
             "click .paste": "paste_panels",
@@ -313,22 +315,110 @@
                 "to OMERO": "OMERO"};
             exportOption = opts[export_opt];
 
-            if (!APP_SERVED_BY_OMERO) {
+            // TODO: Need to check if we're served by Fileglancer!!]
+            const APP_SERVED_BY_FILEGLANCER = true;
+
+            if (APP_SERVED_BY_OMERO) {
+                this.run_export_script(exportOption);
+            } else if (APP_SERVED_BY_FILEGLANCER) {
+                FileglancerFilePickerModal.show({
+                    title: `Export Figure to ${exportOption}`,
+                    subtitle: "Choose output directory",
+                    success: (filepath_dirs, current_subdirs) => {
+                        console.log("Got filepath_dirs!!!:", filepath_dirs);
+                        this.run_export_script_fileglancer(filepath_dirs, current_subdirs, exportOption);
+                    }
+                });
+            } else {
                 let title = "Figure Export Options";
                 let buttons = ["OK"];
                 let message = `The standalone app doesn't support export to PDF.
-                <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally. TODO: add link & instructions.</p>`;
-
+                    <p>You can download the figure via 'Save' and run the Figure_To_Pdf.py python script locally.
+                    TODO: add link & instructions.</p>`;
                 figureConfirmDialog(title, message, buttons);
-                return;
             }
-
-            var url = MAKE_WEBFIGURE_URL;
-            this.run_export_script(url, exportOption);
         },
 
-        run_export_script: function(url, exportOption) {
+        run_export_script_fileglancer: function(filepath_dirs, current_subdirs, exportOption) {
+            console.log("Export figure to Fileglancer...");
 
+            var figureJSON = this.model.figure_toJSON();
+            var figureName = this.model.get("figureName") || "Untitled_Figure";
+            let fext = "." + exportOption.toLowerCase();
+
+            // check file does not already exist in target dir
+            let subdirFileNames = current_subdirs.filter(f => !f.is_dir).map(f => f.name);
+            if (subdirFileNames.includes(figureName + fext)) {
+                let counter = 1;
+                let nameWithNumber = figureName + "_" + counter + fext;
+                while (subdirFileNames.includes(nameWithNumber)) {
+                    counter++;
+                    nameWithNumber = figureName + "_" + counter + fext
+                }
+                figureName = nameWithNumber;
+            } else {
+                figureName = figureName + fext;
+            }
+
+            let outputPathName = [...filepath_dirs, figureName].join("/");
+            console.log("outputPathName:", outputPathName);
+
+            var data = {
+                figureJSON: JSON.stringify(figureJSON),
+                outputPathName: outputPathName
+            };
+
+            let $pdf_inprogress = $("#pdf_inprogress").show();
+            let $create_figure_pdf = $(".export_pdf").hide();
+            let $pdf_download = $("#pdf_download").hide();
+
+            let url = "/omero-figure/export";
+
+            // Start the Figure_To_Pdf.py script
+            $.post( url, data).done(function( data ) {
+                console.log("Figure export started successfully:", data);
+
+                // You could view directly from your browser...
+                // E.g. file:///Users/wmoore/Desktop/FIGURE/OME-Zarr%20demo_1.pdf
+                // BUT browser won't allow us to link to file:/// for security reasons
+                // let directLink = "file://" + outputPathName;
+
+                // keep polling to check for pdf or tiff to appear...
+                var i = setInterval(async function (){
+
+                    let filepath = filepath_dirs.join("/");
+                    let url = `/api/files/home?subpath=${encodeURI(filepath)}`;
+                    let fdata = await fetch(url).then(response => response.json()).catch(error => {
+                        console.error("Error fetching subdirs:", error);
+                        return { files: [] };
+                    });
+                    let subfiles = fdata.files.filter(f => !f.id_dir).map(f => f.name);
+                    console.log("subfiles", subfiles, "figureName", figureName);
+                    if (subfiles.includes(figureName)) {
+                        clearInterval(i);
+
+                        // Let Fileglancer show the local file
+                        var fileViewUrl = `/api/content/home?subpath=${encodeURI(outputPathName)}`;
+
+                        $create_figure_pdf.show();
+                        $pdf_inprogress.hide();
+                        // Download button links to e.g. file:///Users/wmoore/Desktop/FIGURE/OME-Zarr%20demo_1.pdf
+                        console.log("outputPathName", fileViewUrl)
+                        $pdf_download
+                            .attr({'href': fileViewUrl, 'data-original-title': 'Show Figure in your Browser'})
+                            .show()
+                            .children('i').prop('class', 'bi-box-arrow-up-right');
+                    }
+                }, 1000);
+
+            }).fail(function( error ) {
+                console.error("Error exporting figure:", error);
+            });
+        },
+
+        run_export_script: function(exportOption) {
+
+            var url = MAKE_WEBFIGURE_URL;
             let $pdf_inprogress = $("#pdf_inprogress").show();
             let $create_figure_pdf = $(".export_pdf").hide();
             let $pdf_download = $("#pdf_download").hide();
@@ -545,7 +635,17 @@
                     self.fileListViewModal.modal.show();
                 } else {
                     // Open local file or URL
-                    showModal("openLocalFileModal");
+                    // showModal("openLocalFileModal");
+                    FileglancerFilePickerModal.show({
+                        title: "Open Figure from Fileglancer",
+                        subtitle: "Choose a figure file to open",
+                        success: (filepath_dirs) => {
+                            console.log("Got filepath_dirs!!!:", filepath_dirs);
+                            let file = filepath_dirs.join("/");
+                            let figureFileUrl = `/api/content/home?subpath=${encodeURI(file)}`;
+                            self.app.navigate("/omero-figure/?file=" + figureFileUrl, {trigger: true});
+                        }
+                    });
                 }
             };
 
@@ -771,6 +871,12 @@
             event.preventDefault();
             if (this.modal_visible()) return true;
             this.model.select_all();
+        },
+
+        reloadMetadata: function(event) {
+            event.preventDefault();
+            if (this.modal_visible()) return true;
+            this.model.reloadMetadata();
         },
 
         deleteSelectedPanels: function(event) {
