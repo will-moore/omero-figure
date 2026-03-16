@@ -44,6 +44,10 @@
       const MAX_PLANE_SIZE = 10188864;
       const MAX_PROJECTION_BYTES = 1024 * 1024 * 256;
 
+      // Max active channels for multi-channel images
+      const MAX_ACTIVE_CHANNELS = 10;
+      window.MAX_ACTIVE_CHANNELS = MAX_ACTIVE_CHANNELS;
+
       const LOCAL_STORAGE_RECOVERED_FIGURE = "recoveredFigure" + USER_ID;
 
       // Hack! Since the iviewer openwith.js evaluates in global scope and it
@@ -58,8 +62,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
     />
 
-    <script type="module" crossorigin src="/omero-figure/assets/index-BKbpbcnA.js"></script>
-    <link rel="stylesheet" crossorigin href="/omero-figure/assets/index-CD-P53P_.css">
+    <script type="module" crossorigin src="/omero-figure/assets/index-BV-cWQoc.js"></script>
+    <link rel="stylesheet" crossorigin href="/omero-figure/assets/index-WTQZ5m61.css">
   </head>
   <body id="body">
     <!-- Welcome splash-screen Modal -->
@@ -978,6 +982,26 @@
                 <td>Dataset ID: 1654</td>
               </tr>
               <tr>
+                <th>Well, Field</th>
+                <td>Well: [well.label], Field#[field.index]</td>
+                <td>Well: B2, Field#3</td>
+              </tr>
+              <tr>
+                <th>Run</th>
+                <td>[run.name]</td>
+                <td>Run_3_ExpB</td>
+              </tr>
+              <tr>
+                <th>Plate</th>
+                <td>[plate.name]</td>
+                <td>Plate_C2</td>
+              </tr>
+              <tr>
+                <th>Screen</th>
+                <td>[screen.name]</td>
+                <td>CRISPR_KO_Screen1</td>
+              </tr>
+              <tr>
                 <th>Zoom</th>
                 <td>[zoom]</td>
                 <td>100 %</td>
@@ -1414,6 +1438,11 @@
                 <!-- Handled by LegendView -->
                 <li class="edit-legend">
                   <a class="dropdown-item" href="#">Add Figure Legend...</a>
+                </li>
+                <li class="reload_metadata"
+                    title="Reload metadata such as image names, pixel sizes and channel names from the server, for all panels."
+                >
+                  <a class="dropdown-item" href="#">Reload images...</a>
                 </li>
               </ul>
             </li>
