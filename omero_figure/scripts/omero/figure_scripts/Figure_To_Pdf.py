@@ -2234,6 +2234,13 @@ class FigureExport(object):
             size_x = int(size_x * scale)
             size_y = int(size_y * scale)
 
+            # check if region is larger than max plane size...
+            max_sizes = self.conn.getMaxPlaneSize()
+            if width * height > max_sizes[0] * max_sizes[1]:
+                print("Region is too large to render: %d x %d > %d x %d" %
+                      (width, height, max_sizes[0], max_sizes[1]))
+                return None
+
             try:
                 self.apply_rdefs(image, panel)
                 jpeg_data = image.renderJpegRegion(z, t, x, y, width, height,
@@ -2578,6 +2585,8 @@ class FigureExport(object):
             orig_name = os.path.join(
                 self.zip_folder_name, ORIGINAL_DIR, img_name)
         pil_img = self.get_panel_image(panel, orig_name)
+        if pil_img is None:
+            return
 
         # for PDF export, we might have a target dpi
         dpi = panel.get('min_export_dpi', None)
@@ -2764,7 +2773,8 @@ class FigureExport(object):
             self.add_rois(panel, page)  # This does nothing for TIFF export
 
             # Finally, add scale bar and labels to the page
-            self.draw_scalebar(panel, pil_img.size[0], page)
+            if pil_img is not None:
+                self.draw_scalebar(panel, pil_img.size[0], page)
             self.draw_labels(panel, page)
             self.draw_colorbar(panel, page)
 
