@@ -1,13 +1,12 @@
 {
-  "name": "omero-figure",
-  "//": "Required to build but not used. See omero_figure/utils.py for version",
-  "version": "0.0.0",
-  "description": "OMERO figure creation app",
+  "name": "figure",
+  "version": "0.1.0",
+  "description": "Microscopy image figure creation app",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "vite build --emptyOutDir && ./deploy_build.sh",
+    "build": "vite build --emptyOutDir --outDir ../build",
     "ghpages": "vite build --outDir ../gh_pages --base /omero-figure/ && ./deploy_ghpages.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "watch 'npm run build' ./src"
