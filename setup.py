@@ -51,7 +51,7 @@ def require_npm(command, strict=False):
                 print("NPM build completed.")
                 # return to the original directory
                 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-                # run deploy_build.sh 
+                # run deploy_build.sh
                 self.spawn(['sh', 'deploy_build.sh'])
 
             command.run(self)
