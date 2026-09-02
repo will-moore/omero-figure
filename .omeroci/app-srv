@@ -12,7 +12,7 @@ rm -rf $OMERO_DIST/lib/scripts/omero
 
 cd $TARGET
 mkdir -p $OMERO_DIST/lib/scripts/omero/figure_scripts/
-cp figure/python_scripts/Figure_To_Pdf.py $OMERO_DIST/lib/scripts/omero/figure_scripts/Figure_To_Pdf.py
+cp figure/ome_figure/Figure_To_Pdf.py $OMERO_DIST/lib/scripts/omero/figure_scripts/Figure_To_Pdf.py
 
 su - omero-server <<EOF
 /opt/omero/server/venv3/bin/omero login -w omero root@omero

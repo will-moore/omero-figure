@@ -20,5 +20,5 @@ cp figure/build/assets/* omero_figure/static/omero_figure/
 
 # Also copy the Figure_To_Pdf.py script to omero-figure...
 mkdir -p omero_figure/scripts/omero/figure_scripts/
-cp figure/python_scripts/Figure_To_Pdf.py omero_figure/scripts/omero/figure_scripts/Figure_To_Pdf.py
+cp figure/ome_figure/Figure_To_Pdf.py omero_figure/scripts/omero/figure_scripts/Figure_To_Pdf.py
 echo "Figure_To_Pdf.py script copied to omero_figure/scripts/omero/figure_scripts/"
