@@ -1059,6 +1059,7 @@ class FigureExport(object):
         self.conn = conn
         self.script_params = script_params
         self.export_images = export_images
+        self.errors = []
         # For standalone script, we may have relative or absolute output path
         self.output_path_name = script_params.get("outputPathName")
 
@@ -2237,9 +2238,15 @@ class FigureExport(object):
             # check if region is larger than max plane size...
             max_sizes = self.conn.getMaxPlaneSize()
             if width * height > max_sizes[0] * max_sizes[1]:
-                print("Region is too large to render: %d x %d > %d x %d" %
-                      (width, height, max_sizes[0], max_sizes[1]))
-                return None
+                self.errors.append(
+                    f"Failed to render image {image.name} (ID: {image.id}):" +
+                    f" Smallest pyramid resolution is too large to render:" +
+                    f" {width} x {height} > {max_sizes[0]} x {max_sizes[1]}")
+                # return a placeholder PIL Image with "failed to render" message 
+                pil_img = Image.new("RGBA", (width//10, height//10), (221, 221, 221, 255))
+                draw = ImageDraw.Draw(pil_img)
+                draw.text((10, 10), "Failed to render", fill=(255, 0, 0, 255))
+                return pil_img
 
             try:
                 self.apply_rdefs(image, panel)
@@ -2666,14 +2673,22 @@ class FigureExport(object):
         img_ids = set()
         styles = getSampleStyleSheet()
         style_n = styles['Normal']
+        style_error = styles['Heading3'].clone("error")
+        # error should be red
+        style_error.textColor = "#ff0000"
         style_h = styles['Heading1']
         style_h3 = styles['Heading3']
 
         scalebars = []
         self.margin = min(self.page_width, self.page_height) / 9.0
 
-        # Start adding at the top, update page_y as we add paragraphs
+        # First add any error messages...
         page_y = page_height - self.margin
+        print("ERRORS", self.errors)
+        for msg in self.errors:
+            page_y = self.add_para_with_thumb("Error: " + msg, page_y, style=style_error)
+
+        # Start adding at the top, update page_y as we add paragraphs
         page_y = self.add_para_with_thumb(figure_name, page_y, style=style_h)
 
         if "Figure_URI" in script_params:
