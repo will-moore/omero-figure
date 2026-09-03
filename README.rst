@@ -70,6 +70,13 @@ Optional: To change the maximum active channel count from the default of 10:
 
     $ omero config set omero.figure.max_active_channels 15  
 
+Optional: Big images, where the panel viewport at lowest pyramid resolution exceeds the "big image" threshold
+(approx 3000 x 3000 pixels) are excluded from the exported figures.
+To set a different threshold, e.g. 5000 x 5000 pixels, you can do:
+
+::
+
+    $ omero config set omero.figure.max_panel_pixels 25000000
 
 Now restart OMERO.web as normal.
 
