@@ -3475,7 +3475,8 @@ def run_script():
 
         scripts.Long("Max_Panel_Pixels",
                      # default limit is conn.getMaxPlaneSize()
-                     description="Don't render panels with image-regions exceeding this limit"),
+                     description=("Don't render panels with image-regions "
+                                  "exceeding this limit")),
 
         # This allows clients to query the script version
         # by listing script params and getting default value
