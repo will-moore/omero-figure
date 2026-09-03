@@ -699,6 +699,10 @@ def make_web_figure(request, conn=None, **kwargs):
         'Export_Option': wrap(str(export_option)),
         'Webclient_URI': wrap(webclient_uri)}
 
+    if hasattr(figure_settings, 'MAX_PANEL_PIXELS'):
+        max_panel_pixels = figure_settings.MAX_PANEL_PIXELS
+        input_map['Max_Panel_Pixels'] = rlong(int(max_panel_pixels))
+
     # If the figure has been saved, construct URL to it.
     figure_dict = json.loads(figure_json)
     if 'fileId' in figure_dict:

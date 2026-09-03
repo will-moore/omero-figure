@@ -23,6 +23,7 @@
 
 from . import utils
 import warnings
+from omeroweb.utils import leave_none_unset
 
 warnings.warn("Deprecated. utils.__version__", DeprecationWarning)
 OMERO_FIGURE_VERSION = utils.__version__
@@ -34,5 +35,13 @@ CUSTOM_SETTINGS_MAPPINGS = {
         10,
         int,
         "Maximum number of active channels allowed in Figure"
+    ],
+
+    "omero.figure.max_panel_pixels": [
+        "MAX_PANEL_PIXELS",
+        None,
+        leave_none_unset,
+        ("Maximum number of pixels allowed for the rendering engine."
+         "Default is conn.getMaxPlaneSize() approx 3k x 3k")
     ],
 }
