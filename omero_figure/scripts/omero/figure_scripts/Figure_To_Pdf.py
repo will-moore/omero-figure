@@ -1059,6 +1059,11 @@ class FigureExport(object):
 
         self.conn = conn
         self.script_params = script_params
+        self.max_panel_pixels = script_params.get("Max_Panel_Pixels")
+        if self.max_panel_pixels is None:
+            if conn is not None:
+                max_plane_size = self.conn.getMaxPlaneSize()
+                self.max_panel_pixels = max_plane_size[0] * max_plane_size[1]
         self.export_images = export_images
         self.errors = []
         # For standalone script, we may have relative or absolute output path
@@ -2237,21 +2242,19 @@ class FigureExport(object):
             size_y = int(size_y * scale)
 
             # check if region is larger than max plane size...
-            max_sizes = self.conn.getMaxPlaneSize()
-            if width * height > max_sizes[0] * max_sizes[1]:
+            if width * height > self.max_panel_pixels:
                 self.errors.append(
                     f"Failed to render image {image.name} (ID: {image.id}):" +
                     " Smallest pyramid resolution is too large to render:" +
-                    f" {width} x {height} > {max_sizes[0]} x {max_sizes[1]}")
+                    f" {width} x {height} > {self.max_panel_pixels}")
                 # return a placeholder PIL Image with "failed to render" text
                 ph_width = 400
                 ph_height = int(ph_width * (height / width))
-                font = get_font(30)
                 pil_img = Image.new("RGBA", (ph_width, ph_height),
                                     (221, 221, 221, 255))
                 draw = ImageDraw.Draw(pil_img)
                 draw.text((10, 10), "Failed to render",
-                          fill=(255, 0, 0, 255), font=font)
+                          fill=(255, 0, 0, 255), font=get_font(30))
                 return pil_img
 
             try:
@@ -3469,6 +3472,10 @@ def run_script():
 
         scripts.String("Figure_URI",
                        description="URL to the Figure"),
+
+        scripts.Long("Max_Panel_Pixels",
+                     # default limit is conn.getMaxPlaneSize()
+                     description="Don't render panels with image-regions exceeding this limit"),
 
         # This allows clients to query the script version
         # by listing script params and getting default value
