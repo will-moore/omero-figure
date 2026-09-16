@@ -250,6 +250,9 @@ Commit changes to `figure` first, then update the submodule commit:
 Release process
 ---------------
 
+First, we need to release the `https://ome.github.io/figure/ <https://ome.github.io/figure/>`_ app and
+tag the release. Then we can update the submodule in this repository to point to the new release as above.
+
 This repository uses `bump2version <https://pypi.org/project/bump2version/>`_ to manage version numbers.
 To create a release-candidate (RC) from a development version run::
 
