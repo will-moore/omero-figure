@@ -45,6 +45,7 @@ from io import BytesIO
 
 from omeroweb.webclient.decorators import login_required
 from .omeroutils import get_timestamps, get_wellsample_index
+from .utils import __version__ as VERSION
 
 import logging
 
@@ -140,6 +141,8 @@ def index(request, file_id=None, conn=None, **kwargs):
         'const LENGTH_UNITS = %s;' % json.dumps(length_units),
         'const MAX_ACTIVE_CHANNELS = 10;':
         'const MAX_ACTIVE_CHANNELS = %s;' % max_active_channels,
+        'const OMERO_FIGURE_VERSION = "";':
+        'const OMERO_FIGURE_VERSION = "%s";' % VERSION
     }
     for key, value in to_replace.items():
         if key not in html:
