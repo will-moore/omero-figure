@@ -177,7 +177,14 @@ Development
 See the `figure` app at `https://ome.github.io/figure/ <https://ome.github.io/figure/>`_
 for development details of the standalone app.
 
-The `figure` repo is a submodule of the `omero-figure` repository.
+The `figure` repo is a submodule of the `omero-figure` repository, so you will need to
+checkout that submodule after cloning the repository:
+
+::
+
+    $ git clone https://github.com/ome/omero-figure.git
+    $ git submodule init    // only the first time after cloning
+    $ git submodule update
 
 See `docs/contributing.md` for information on code layout and other details.
 
