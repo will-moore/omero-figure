@@ -123,8 +123,8 @@ def index(request, file_id=None, conn=None, **kwargs):
     ping_url = reverse("keepalive_ping")
 
     to_replace = {
-        'const APP_SERVED_BY_OMERO = false;':
-        'const APP_SERVED_BY_OMERO = true;',
+        'let APP_SERVED_BY_OMERO = false;':
+        'let APP_SERVED_BY_OMERO = true;',
         'const BASE_OMEROWEB_URL = dev_omeroweb_url;':
         'const BASE_OMEROWEB_URL = "%s";' % omeroweb_index,
         'const APP_ROOT_URL = "";':
